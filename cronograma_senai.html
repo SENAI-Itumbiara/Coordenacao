@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma de Aulas — SENAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue-900:#0a2540;--blue-800:#1a3a5c;--blue-700:#1d4ed8;--blue-600:#2563eb;
+  --blue-500:#3b82f6;--blue-400:#60a5fa;--blue-200:#bfdbfe;--blue-100:#dbeafe;--blue-50:#eff6ff;
+  --gray-900:#111827;--gray-800:#1f2937;--gray-700:#374151;--gray-600:#4b5563;
+  --gray-500:#6b7280;--gray-400:#9ca3af;--gray-300:#d1d5db;--gray-200:#e5e7eb;
+  --gray-100:#f3f4f6;--gray-50:#f9fafb;
+  --green-600:#16a34a;--green-100:#dcfce7;--green-50:#f0fdf4;
+  --red-600:#dc2626;--red-200:#fecaca;--red-100:#fee2e2;--red-50:#fef2f2;
+  --amber-600:#d97706;--amber-100:#fef3c7;--amber-50:#fffbeb;
+  --yellow-300:#fde047;--yellow-100:#fef9c3;
+  --sidebar-w:260px;
+  --header-h:58px;
+  --font:'DM Sans',sans-serif;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);
+  --weekend-bg:#fef3c7;--holiday-bg:#fee2e2;--remat-bg:#dbeafe;
+}
+body{font-family:var(--font);background:var(--gray-50);color:var(--gray-900);font-size:14px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── TOP NAV ── */
+#topbar{height:var(--header-h);background:var(--blue-900);display:flex;align-items:center;padding:0 18px;gap:16px;flex-shrink:0;border-bottom:2px solid var(--blue-800)}
+#topbar .logo{display:flex;align-items:center;gap:10px}
+#topbar .logo svg{width:36px;height:36px}
+#topbar .logo-text{color:#fff;font-size:16px;font-weight:600;letter-spacing:.02em}
+#topbar .logo-sub{color:var(--blue-400);font-size:11px;font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+#topbar .spacer{flex:1}
+#topbar .btn-topbar{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px 14px;border-radius:var(--radius);cursor:pointer;font-family:var(--font);font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;transition:background .15s}
+#topbar .btn-topbar:hover{background:rgba(255,255,255,.2)}
+#topbar .btn-topbar.primary{background:var(--blue-600);border-color:var(--blue-500)}
+#topbar .btn-topbar.primary:hover{background:var(--blue-500)}
+#topbar .project-name{color:var(--blue-200);font-size:13px;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── LAYOUT ── */
+#main-layout{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:var(--sidebar-w);background:#fff;border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:12px 0;border-bottom:1px solid var(--gray-100)}
+.sidebar-section:last-child{border-bottom:none}
+.sidebar-title{font-size:10px;font-weight:700;color:var(--gray-500);letter-spacing:.1em;text-transform:uppercase;padding:0 16px 8px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;border-radius:0;transition:background .12s;color:var(--gray-700);font-size:13.5px;font-weight:400;border:none;background:none;width:100%;text-align:left}
+.sidebar-item:hover{background:var(--blue-50);color:var(--blue-700)}
+.sidebar-item.active{background:var(--blue-50);color:var(--blue-700);font-weight:600}
+.sidebar-item .icon{width:18px;height:18px;flex-shrink:0;opacity:.7}
+.sidebar-item.active .icon{opacity:1}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow:auto;padding:0}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:20px 28px 16px;background:#fff;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.page-title{font-size:18px;font-weight:600;color:var(--gray-900)}
+.page-subtitle{font-size:13px;color:var(--gray-500);margin-top:2px}
+.page-header .spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--gray-300);background:#fff;color:var(--gray-700);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--gray-50);border-color:var(--gray-400)}
+.btn.primary{background:var(--blue-600);border-color:var(--blue-600);color:#fff}
+.btn.primary:hover{background:var(--blue-700);border-color:var(--blue-700)}
+.btn.danger{background:var(--red-600);border-color:var(--red-600);color:#fff}
+.btn.danger:hover{background:#b91c1c;border-color:#b91c1c}
+.btn.success{background:var(--green-600);border-color:var(--green-600);color:#fff}
+.btn.success:hover{background:#15803d}
+.btn svg{width:15px;height:15px;flex-shrink:0}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* ── VIEWS ── */
+.view{display:none;padding:24px 28px;min-height:100%}
+.view.active{display:block}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:600;color:var(--gray-900)}
+
+/* ── FORM ELEMENTS ── */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:5px;letter-spacing:.02em}
+.form-control{width:100%;padding:8px 11px;border:1px solid var(--gray-300);border-radius:var(--radius);font-family:var(--font);font-size:13.5px;color:var(--gray-900);background:#fff;transition:border-color .15s,box-shadow .15s;outline:none}
+.form-control:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.form-control select,select.form-control{cursor:pointer}
+textarea.form-control{resize:vertical;min-height:80px}
+.form-row{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--radius-xl);max-width:600px;width:100%;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
+.modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-size:15px;font-weight:600;color:var(--gray-900)}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--gray-500);padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{color:var(--gray-900);background:var(--gray-100)}
+.modal-body{padding:20px 22px;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--gray-200);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
+
+/* ── TABLES ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--gray-200)}
+table.data-table{width:100%;border-collapse:collapse;font-size:13px}
+table.data-table th{background:var(--gray-50);padding:10px 14px;font-weight:600;color:var(--gray-600);text-align:left;border-bottom:1px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+table.data-table td{padding:10px 14px;border-bottom:1px solid var(--gray-100);vertical-align:middle;color:var(--gray-800)}
+table.data-table tr:last-child td{border-bottom:none}
+table.data-table tr:hover td{background:var(--gray-50)}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;letter-spacing:.03em}
+.badge-blue{background:var(--blue-100);color:var(--blue-700)}
+.badge-green{background:var(--green-100);color:var(--green-600)}
+.badge-red{background:var(--red-100);color:var(--red-600)}
+.badge-amber{background:var(--amber-100);color:var(--amber-600)}
+.badge-gray{background:var(--gray-200);color:var(--gray-700)}
+
+/* ── CRONOGRAMA CALENDAR ── */
+#schedule-wrap{overflow-x:auto;padding:0 28px 28px}
+
+.month-block{margin-bottom:28px}
+.month-header{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--blue-900);color:#fff;border-radius:var(--radius-lg) var(--radius-lg) 0 0;font-size:13px;font-weight:600;letter-spacing:.03em}
+.month-header .month-name{font-size:15px;font-weight:700;text-transform:capitalize}
+.month-header .month-hours{color:var(--blue-300);font-size:12px;margin-left:auto}
+.month-header .month-actions{display:flex;gap:8px}
+.month-actions button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:var(--font);font-size:11px;font-weight:500;transition:background .15s}
+.month-actions button:hover{background:rgba(255,255,255,.28)}
+
+.cal-table{width:100%;border-collapse:collapse;border:1px solid var(--gray-200);border-top:none;font-size:12.5px;min-width:900px}
+.cal-table th.col-uc{background:var(--blue-800);color:#fff;padding:9px 14px;font-weight:600;font-size:12px;text-align:left;min-width:200px;max-width:240px}
+.cal-table th.col-prof{background:var(--blue-800);color:#fff;padding:9px 10px;font-weight:600;font-size:12px;min-width:140px}
+.cal-table th.col-day{background:var(--blue-800);color:#fff;padding:7px 4px;font-weight:600;font-size:11px;text-align:center;min-width:30px;max-width:40px;vertical-align:bottom}
+.cal-table th.col-day .day-num{font-size:12px;font-weight:700;display:block;line-height:1}
+.cal-table th.col-day .day-name{font-size:9px;font-weight:400;color:rgba(255,255,255,.7);display:block;margin-top:2px;text-transform:uppercase}
+.cal-table th.col-total{background:var(--blue-800);color:#fff;padding:9px 8px;font-weight:600;font-size:11px;text-align:center;min-width:50px}
+.cal-table th.col-prog{background:var(--blue-800);color:#fff;padding:9px 8px;font-weight:600;font-size:11px;text-align:center;min-width:70px}
+
+.cal-table td.col-uc{background:#fff;padding:9px 14px;border-bottom:1px solid var(--gray-200);color:var(--gray-900);font-size:12.5px;border-right:1px solid var(--gray-200)}
+.cal-table td.col-prof{background:var(--gray-50);padding:9px 10px;border-bottom:1px solid var(--gray-200);color:var(--gray-700);font-size:12px;border-right:1px solid var(--gray-200)}
+.cal-table td.col-day-cell{padding:4px 3px;border:1px solid var(--gray-200);text-align:center;min-width:30px;cursor:pointer;position:relative}
+.cal-table td.col-day-cell:hover{background:var(--blue-50)}
+.cal-table td.col-day-cell.weekend{background:var(--weekend-bg)}
+.cal-table td.col-day-cell.holiday{background:var(--holiday-bg)}
+.cal-table td.col-day-cell.remat{background:var(--remat-bg)}
+.cal-table td.col-day-cell .ch-input{width:100%;border:none;background:transparent;text-align:center;font-family:var(--font);font-size:12px;font-weight:600;color:var(--blue-700);cursor:pointer;padding:3px 0;outline:none;min-height:26px}
+.cal-table td.col-day-cell .ch-input:focus{background:var(--blue-50);border-radius:4px}
+.cal-table td.col-total{text-align:center;padding:8px;border:1px solid var(--gray-200);font-weight:700;color:var(--blue-700);font-size:13px;background:var(--blue-50)}
+.cal-table td.col-prog{text-align:center;padding:8px;border:1px solid var(--gray-200);font-size:11.5px;font-weight:600;color:var(--gray-700);white-space:nowrap}
+.cal-table tr.add-row td{padding:8px 14px;border-bottom:1px solid var(--gray-200)}
+
+.add-row-btn{background:none;border:1px dashed var(--gray-300);color:var(--gray-500);padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-family:var(--font);font-size:12px;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:6px;margin:8px 0}
+.add-row-btn:hover{border-color:var(--blue-500);color:var(--blue-600);background:var(--blue-50)}
+.del-row-btn{background:none;border:none;color:var(--gray-400);cursor:pointer;padding:2px 5px;border-radius:4px;font-size:16px;line-height:1;transition:color .15s}
+.del-row-btn:hover{color:var(--red-600)}
+
+/* row select-able cell */
+.uc-select,.prof-input{width:100%;border:none;background:transparent;font-family:var(--font);font-size:12.5px;color:var(--gray-900);padding:0;outline:none;cursor:pointer}
+.uc-select:focus,.prof-input:focus{background:var(--blue-50);border-radius:4px;padding:2px 4px}
+
+/* ── COURSE MANAGER ── */
+.course-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;min-height:500px}
+.course-list-panel{border:1px solid var(--gray-200);border-radius:var(--radius-lg);background:#fff;overflow:hidden;display:flex;flex-direction:column}
+.course-list-header{padding:12px 14px;border-bottom:1px solid var(--gray-200);background:var(--gray-50);display:flex;align-items:center;justify-content:space-between}
+.course-list-scroll{flex:1;overflow-y:auto}
+.course-list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--gray-100);cursor:pointer;transition:background .12s}
+.course-list-item:hover{background:var(--blue-50)}
+.course-list-item.selected{background:var(--blue-50);border-left:3px solid var(--blue-600)}
+.course-list-item .name{font-size:13px;font-weight:500;color:var(--gray-900)}
+.course-list-item .info{font-size:11px;color:var(--gray-500);margin-top:2px}
+.course-detail-panel{border:1px solid var(--gray-200);border-radius:var(--radius-lg);background:#fff;padding:20px;display:flex;flex-direction:column;gap:16px}
+.uc-table-wrap{overflow-x:auto;border:1px solid var(--gray-200);border-radius:var(--radius)}
+table.uc-table{width:100%;border-collapse:collapse;font-size:13px}
+table.uc-table th{background:var(--gray-50);padding:8px 12px;font-weight:600;color:var(--gray-600);text-align:left;border-bottom:1px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+table.uc-table td{padding:8px 12px;border-bottom:1px solid var(--gray-100);color:var(--gray-800)}
+table.uc-table tr:last-child td{border-bottom:none}
+table.uc-table input,table.uc-table select{border:none;background:transparent;font-family:var(--font);font-size:13px;width:100%;outline:none;color:var(--gray-800)}
+table.uc-table input:focus,table.uc-table select:focus{background:var(--blue-50);border-radius:4px;padding:2px 4px}
+
+/* ── HOLIDAYS ── */
+.holiday-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px}
+.holiday-card{border:1px solid var(--gray-200);border-radius:var(--radius-lg);overflow:hidden;background:#fff}
+.holiday-card-head{padding:10px 14px;background:var(--red-50);border-bottom:1px solid var(--red-100);display:flex;align-items:center;gap:10px}
+.holiday-card-head .dot{width:10px;height:10px;border-radius:50%;background:var(--red-600);flex-shrink:0}
+.holiday-card-head .title{font-size:13px;font-weight:600;color:var(--red-600)}
+.holiday-card-head .date{font-size:12px;color:var(--gray-500);margin-left:auto}
+.holiday-card-head .del-btn{background:none;border:none;cursor:pointer;color:var(--gray-400);padding:2px 4px;font-size:16px;line-height:1;border-radius:4px}
+.holiday-card-head .del-btn:hover{color:var(--red-600)}
+.holiday-type-tag{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;margin-left:auto}
+.holiday-type-tag.feriado{background:var(--red-100);color:var(--red-600)}
+.holiday-type-tag.recesso{background:var(--amber-100);color:var(--amber-600)}
+.holiday-type-tag.remat{background:var(--blue-100);color:var(--blue-700)}
+
+/* ── SCHEDULE INFO FORM ── */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--gray-900);color:#fff;padding:10px 18px;border-radius:var(--radius-lg);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;display:flex;align-items:center;gap:8px;max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{background:var(--green-600)}
+#toast.error{background:var(--red-600)}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--gray-400);gap:12px;text-align:center}
+.empty-state svg{width:48px;height:48px;opacity:.4}
+.empty-state p{font-size:14px;color:var(--gray-500)}
+
+/* ── DIVIDER ── */
+.section-divider{height:1px;background:var(--gray-200);margin:20px 0}
+
+/* progress bar */
+.prog-bar{height:6px;background:var(--gray-200);border-radius:99px;overflow:hidden;margin-top:4px}
+.prog-bar-fill{height:100%;background:var(--blue-500);border-radius:99px;transition:width .3s}
+.prog-bar-fill.over{background:var(--green-600)}
+
+/* month picker */
+.month-picker-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.month-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--gray-200);border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;background:#fff;color:var(--gray-700)}
+.month-chip:hover{border-color:var(--blue-400);color:var(--blue-600)}
+.month-chip.active{background:var(--blue-600);border-color:var(--blue-600);color:#fff}
+.month-chip .del{font-size:14px;opacity:.7;margin-left:2px;line-height:1}
+
+/* summary strip */
+.summary-strip{display:flex;gap:0;border:1px solid var(--gray-200);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px;flex-wrap:wrap}
+.summary-item{flex:1;padding:14px 18px;background:#fff;border-right:1px solid var(--gray-200);min-width:120px}
+.summary-item:last-child{border-right:none}
+.summary-item .label{font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.summary-item .value{font-size:20px;font-weight:700;color:var(--blue-700)}
+.summary-item .sub{font-size:11px;color:var(--gray-400);margin-top:2px}
+
+/* welcome / dashboard */
+.welcome-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.welcome-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.welcome-card:hover{border-color:var(--blue-400);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.welcome-card .icon-wrap{width:40px;height:40px;border-radius:var(--radius);background:var(--blue-50);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.welcome-card .icon-wrap.green{background:var(--green-50)}
+.welcome-card .icon-wrap.amber{background:var(--amber-50)}
+.welcome-card .icon-wrap.red{background:var(--red-50)}
+.welcome-card .card-label{font-size:13px;font-weight:600;color:var(--gray-900)}
+.welcome-card .card-desc{font-size:12px;color:var(--gray-500)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--gray-400)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="logo">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="8" fill="#1d4ed8"/>
+      <rect x="6" y="10" width="24" height="3" rx="1.5" fill="white"/>
+      <rect x="6" y="16" width="18" height="3" rx="1.5" fill="white" opacity=".7"/>
+      <rect x="6" y="22" width="21" height="3" rx="1.5" fill="white" opacity=".5"/>
+    </svg>
+    <div>
+      <div class="logo-text">CronogramaSENAI</div>
+      <div class="logo-sub">Gestão de Cronogramas</div>
+    </div>
+  </div>
+  <div style="width:1px;height:28px;background:rgba(255,255,255,.15);margin:0 6px"></div>
+  <span class="project-name" id="topbar-project-name">Nenhum projeto aberto</span>
+  <div class="spacer"></div>
+  <button class="btn-topbar" onclick="openNewProjectModal()">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12" stroke-linecap="round"/></svg>
+    Novo
+  </button>
+  <button class="btn-topbar" onclick="triggerOpen()">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 012-2h3l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+    Abrir
+  </button>
+  <button class="btn-topbar" onclick="saveProject()">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v1a2 2 0 002 2h8a2 2 0 002-2v-1M7 8l3 3 3-3M10 4v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Salvar
+  </button>
+  <button class="btn-topbar primary" onclick="exportProject()">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 16h12M10 4v8M7 9l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Exportar HTML
+  </button>
+  <input type="file" id="file-input" accept=".json" style="display:none" onchange="loadProjectFile(event)">
+</div>
+
+<!-- MAIN LAYOUT -->
+<div id="main-layout">
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Projeto</div>
+      <button class="sidebar-item active" onclick="showView('dashboard')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>
+        Painel
+      </button>
+      <button class="sidebar-item" onclick="showView('info')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7"/><path d="M10 9v5M10 7h.01" stroke-linecap="round"/></svg>
+        Informações do Evento
+      </button>
+      <button class="sidebar-item" onclick="showView('schedule')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M7 2v4M13 2v4M3 9h14" stroke-linecap="round"/></svg>
+        Cronograma
+      </button>
+      <button class="sidebar-item" onclick="showView('summary')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 16V8l6-5 6 5v8M8 16v-5h4v5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Resumo de CH
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Cadastros Globais</div>
+      <button class="sidebar-item" onclick="showView('courses')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h12v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zM8 4V2M12 4V2M4 8h12" stroke-linecap="round"/></svg>
+        Cursos e Componentes
+      </button>
+      <button class="sidebar-item" onclick="showView('holidays')">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 2l1.5 4.5H17l-4.4 3.2 1.7 5.3L10 12l-4.3 3 1.7-5.3L3 6.5h5.5L10 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Feriados &amp; Recesso
+      </button>
+    </div>
+    <div class="sidebar-section" style="padding:14px 16px">
+      <div style="font-size:11px;color:var(--gray-400);line-height:1.6">
+        <strong style="color:var(--gray-600);display:block;margin-bottom:4px">Legenda</strong>
+        <span style="display:inline-block;width:12px;height:12px;background:var(--weekend-bg);border:1px solid #f59e0b;border-radius:2px;vertical-align:middle;margin-right:4px"></span>Fim de semana<br>
+        <span style="display:inline-block;width:12px;height:12px;background:var(--holiday-bg);border:1px solid #ef4444;border-radius:2px;vertical-align:middle;margin-right:4px;margin-top:4px"></span>Feriado/Recesso<br>
+        <span style="display:inline-block;width:12px;height:12px;background:var(--remat-bg);border:1px solid #3b82f6;border-radius:2px;vertical-align:middle;margin-right:4px;margin-top:4px"></span>Rematrícula
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard" class="view active">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Painel</div>
+          <div class="page-subtitle">Visão geral do projeto atual</div>
+        </div>
+      </div>
+      <div style="padding:24px 28px">
+        <div class="welcome-grid">
+          <div class="welcome-card" onclick="openNewProjectModal()">
+            <div class="icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--blue-600)" stroke-width="1.7"><path d="M10 4v12M4 10h12" stroke-linecap="round"/></svg>
+            </div>
+            <div class="card-label">Novo Projeto</div>
+            <div class="card-desc">Criar um cronograma do zero</div>
+          </div>
+          <div class="welcome-card" onclick="triggerOpen()">
+            <div class="icon-wrap green">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--green-600)" stroke-width="1.7"><path d="M3 7a2 2 0 012-2h3l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+            </div>
+            <div class="card-label">Abrir Projeto</div>
+            <div class="card-desc">Continuar editando um arquivo salvo</div>
+          </div>
+          <div class="welcome-card" onclick="saveProject()">
+            <div class="icon-wrap amber">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--amber-600)" stroke-width="1.7"><path d="M4 14v1a2 2 0 002 2h8a2 2 0 002-2v-1M7 8l3 3 3-3M10 4v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="card-label">Salvar Projeto</div>
+            <div class="card-desc">Salvar arquivo .json para edições futuras</div>
+          </div>
+          <div class="welcome-card" onclick="exportProject()">
+            <div class="icon-wrap red">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="var(--red-600)" stroke-width="1.7"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M8 7h4M8 11h4M8 15h2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="card-label">Exportar HTML</div>
+            <div class="card-desc">Gerar cronograma para compartilhar</div>
+          </div>
+        </div>
+        <div id="dashboard-summary"></div>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div id="view-info" class="view">
+      <div class="page-header">
+        <div><div class="page-title">Informações do Evento</div><div class="page-subtitle">Dados gerais do cronograma</div></div>
+        <div class="spacer"></div>
+        <button class="btn primary" onclick="saveInfo()">Salvar Informações</button>
+      </div>
+      <div style="padding:24px 28px">
+        <div class="card">
+          <div class="form-row" id="info-form">
+            <div class="form-group"><label class="form-label">Número do Evento</label><input class="form-control" id="inf-evento" placeholder="ex: 997572"></div>
+            <div class="form-group"><label class="form-label">Curso</label><input class="form-control" id="inf-curso" placeholder="ex: Técnico em Mecânica"></div>
+            <div class="form-group"><label class="form-label">Sala</label><input class="form-control" id="inf-sala" placeholder="ex: Mec. Industrial"></div>
+            <div class="form-group"><label class="form-label">Coordenador</label><input class="form-control" id="inf-coord" placeholder="ex: Gabriel Jorge"></div>
+            <div class="form-group"><label class="form-label">Horário</label><input class="form-control" id="inf-horario" placeholder="ex: 19:00 às 22:00h"></div>
+            <div class="form-group"><label class="form-label">Cidade</label><input class="form-control" id="inf-cidade" placeholder="ex: Itumbiara - GO"></div>
+            <div class="form-group"><label class="form-label">Modalidade</label>
+              <select class="form-control" id="inf-modalidade">
+                <option value="Habilitação Técnica">Habilitação Técnica</option>
+                <option value="Qualificação Profissional">Qualificação Profissional</option>
+                <option value="Aprendizagem Industrial">Aprendizagem Industrial</option>
+                <option value="FIC">FIC</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Carga Horária Total (h)</label><input class="form-control" id="inf-chtotal" type="number" placeholder="ex: 1360"></div>
+          </div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Meses do Cronograma</span><button class="btn btn-sm" onclick="addMonthModal()">+ Adicionar Mês</button></div>
+          <div class="month-picker-wrap" id="month-chips"></div>
+          <p style="font-size:12px;color:var(--gray-500);margin-top:12px">Clique nos meses para adicionar/remover. Os meses definidos aqui criam as colunas do calendário no Cronograma.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div id="view-schedule" class="view">
+      <div class="page-header">
+        <div><div class="page-title">Cronograma de Aulas</div><div class="page-subtitle" id="sched-subtitle">Configure os meses e adicione as aulas</div></div>
+        <div class="spacer"></div>
+        <button class="btn" onclick="addMonthModal()">+ Mês</button>
+        <button class="btn primary" onclick="saveProject()">Salvar</button>
+      </div>
+      <div id="schedule-wrap">
+        <div id="schedule-container"></div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div id="view-summary" class="view">
+      <div class="page-header">
+        <div><div class="page-title">Resumo de Carga Horária</div><div class="page-subtitle">Progresso das componentes curriculares</div></div>
+      </div>
+      <div style="padding:24px 28px">
+        <div id="summary-content"></div>
+      </div>
+    </div>
+
+    <!-- COURSES -->
+    <div id="view-courses" class="view">
+      <div class="page-header">
+        <div><div class="page-title">Cursos e Componentes Curriculares</div><div class="page-subtitle">Cadastro global — disponível em todos os projetos</div></div>
+        <div class="spacer"></div>
+        <button class="btn primary" onclick="openNewCourseModal()">+ Novo Curso</button>
+      </div>
+      <div style="padding:24px 28px">
+        <div class="course-grid">
+          <div class="course-list-panel">
+            <div class="course-list-header">
+              <span style="font-size:12px;font-weight:600;color:var(--gray-700)">Cursos</span>
+              <span id="course-count" class="badge badge-blue">0</span>
+            </div>
+            <div class="course-list-scroll" id="course-list"></div>
+          </div>
+          <div class="course-detail-panel" id="course-detail">
+            <div class="empty-state">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="6" width="32" height="36" rx="3"/><line x1="16" y1="16" x2="32" y2="16"/><line x1="16" y1="22" x2="32" y2="22"/><line x1="16" y1="28" x2="26" y2="28"/></svg>
+              <p>Selecione um curso para ver suas componentes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOLIDAYS -->
+    <div id="view-holidays" class="view">
+      <div class="page-header">
+        <div><div class="page-title">Feriados, Recessos e Rematrículas</div><div class="page-subtitle">Cadastro global — afeta todos os projetos e cronogramas</div></div>
+        <div class="spacer"></div>
+        <button class="btn primary" onclick="openHolidayModal()">+ Adicionar</button>
+      </div>
+      <div style="padding:24px 28px">
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="filterHoliday('all')" id="hf-all" style="border-color:var(--blue-400);color:var(--blue-600)">Todos</button>
+          <button class="btn btn-sm" onclick="filterHoliday('feriado')" id="hf-feriado">Feriados</button>
+          <button class="btn btn-sm" onclick="filterHoliday('recesso')" id="hf-recesso">Recessos</button>
+          <button class="btn btn-sm" onclick="filterHoliday('remat')" id="hf-remat">Rematrículas</button>
+        </div>
+        <div class="holiday-grid" id="holiday-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODALS -->
+<!-- New Project -->
+<div class="modal-overlay" id="modal-new">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header"><span class="modal-title">Novo Projeto</span><button class="modal-close" onclick="closeModal('modal-new')"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l10 10M15 5L5 15"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nome do Projeto</label><input class="form-control" id="new-proj-name" placeholder="ex: Técnico em Mecânica 2025 — Evento 997572"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Número do Evento</label><input class="form-control" id="new-proj-evento" placeholder="997572"></div>
+        <div class="form-group"><label class="form-label">Curso</label>
+          <select class="form-control" id="new-proj-curso">
+            <option value="">— Selecionar curso —</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Coordenador</label><input class="form-control" id="new-proj-coord" placeholder="Nome do coordenador"></div>
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-control" id="new-proj-cidade" value="Itumbiara - GO"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Sala</label><input class="form-control" id="new-proj-sala" placeholder="ex: Mec. Industrial"></div>
+        <div class="form-group"><label class="form-label">Horário</label><input class="form-control" id="new-proj-horario" placeholder="19:00 às 22:00h"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-new')">Cancelar</button><button class="btn primary" onclick="createNewProject()">Criar Projeto</button></div>
+  </div>
+</div>
+
+<!-- Add Month Modal -->
+<div class="modal-overlay" id="modal-month">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header"><span class="modal-title">Adicionar Mês ao Cronograma</span><button class="modal-close" onclick="closeModal('modal-month')"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l10 10M15 5L5 15"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Mês / Ano</label><input class="form-control" id="month-input" type="month"></div>
+      <p style="font-size:12px;color:var(--gray-500)">O mês será adicionado ao cronograma. Você pode adicionar múltiplos meses.</p>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-month')">Cancelar</button><button class="btn primary" onclick="addMonth()">Adicionar</button></div>
+  </div>
+</div>
+
+<!-- New Course Modal -->
+<div class="modal-overlay" id="modal-course">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header"><span class="modal-title" id="modal-course-title">Novo Curso</span><button class="modal-close" onclick="closeModal('modal-course')"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l10 10M15 5L5 15"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nome do Curso</label><input class="form-control" id="course-name-input" placeholder="ex: Técnico em Mecânica"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Carga Horária Total (h)</label><input class="form-control" id="course-ch-input" type="number" placeholder="1360"></div>
+        <div class="form-group"><label class="form-label">Modalidade</label>
+          <select class="form-control" id="course-modal-input">
+            <option>Habilitação Técnica</option><option>Qualificação Profissional</option><option>Aprendizagem Industrial</option><option>FIC</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-course')">Cancelar</button><button class="btn primary" onclick="saveCourse()">Salvar Curso</button></div>
+  </div>
+</div>
+
+<!-- Holiday Modal -->
+<div class="modal-overlay" id="modal-holiday">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header"><span class="modal-title">Adicionar Feriado / Recesso</span><button class="modal-close" onclick="closeModal('modal-holiday')"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l10 10M15 5L5 15"/></svg></button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Data Inicial</label><input class="form-control" id="hol-start" type="date"></div>
+        <div class="form-group"><label class="form-label">Data Final</label><input class="form-control" id="hol-end" type="date"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Descrição</label><input class="form-control" id="hol-desc" placeholder="ex: Feriado Nacional — Carnaval"></div>
+      <div class="form-group"><label class="form-label">Tipo</label>
+        <select class="form-control" id="hol-type">
+          <option value="feriado">Feriado</option>
+          <option value="recesso">Recesso</option>
+          <option value="remat">Rematrícula</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+        <input type="checkbox" id="hol-annual" style="width:16px;height:16px;cursor:pointer">
+        <label for="hol-annual" style="font-size:13px;color:var(--gray-700);cursor:pointer">Repetir anualmente (feriado fixo)</label>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-holiday')">Cancelar</button><button class="btn primary" onclick="saveHoliday()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- Cell Edit Popup -->
+<div id="cell-popup" style="display:none;position:fixed;z-index:500;background:#fff;border:1px solid var(--gray-300);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow-lg);min-width:200px">
+  <div style="font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:8px" id="cell-popup-label"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <label style="font-size:12px;color:var(--gray-600)">Horas (CH):</label>
+    <input id="cell-popup-val" type="number" min="0" max="12" step="1" style="width:70px;padding:5px 8px;border:1px solid var(--gray-300);border-radius:6px;font-family:var(--font);font-size:14px;font-weight:600;text-align:center;outline:none">
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-sm" onclick="closeCellPopup()">Cancelar</button>
+    <button class="btn btn-sm primary" onclick="applyCellPopup()">OK</button>
+    <button class="btn btn-sm danger" onclick="clearCell()">Limpar</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//   STATE
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'senai_cronograma_global';
+let state = {
+  projectName: '',
+  info: {evento:'',curso:'',sala:'',coord:'',horario:'',cidade:'Itumbiara - GO',modalidade:'Habilitação Técnica',chtotal:0},
+  months: [],   // [{year:2025,month:8},...] month=0-indexed
+  rows: {},     // {monthKey: [{uc:'',prof:'',days:{1:3,5:3,...},ucTotalCH:0}]}
+  courses: [],  // [{id,name,ch,modalidade,ucs:[{modulo,name,ch}]}]
+  holidays: [], // [{id,start:'YYYY-MM-DD',end:'YYYY-MM-DD',desc,type:'feriado|recesso|remat',annual:bool}]
+};
+
+let currentView = 'dashboard';
+let currentCourseId = null;
+let cellPopupData = null; // {monthKey, rowIdx, day}
+let holidayFilter = 'all';
+
+// ═══════════════════════════════════════════
+//   INIT
+// ═══════════════════════════════════════════
+function init(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(saved){ try{ const g = JSON.parse(saved); state.courses=g.courses||[]; state.holidays=g.holidays||[]; }catch(e){} }
+  // seed with Técnico em Mecânica if no courses
+  if(!state.courses.length) seedCourses();
+  renderCourseList();
+  renderHolidays();
+  updateDashboard();
+}
+
+function seedCourses(){
+  state.courses = [{
+    id: uid(), name:'Técnico em Mecânica', ch:1360, modalidade:'Habilitação Técnica',
+    ucs:[
+      {modulo:'Básico',name:'Introdução à Tecnologia da Informação e Comunicação',ch:40},
+      {modulo:'Básico',name:'Introdução a Qualidade e Produtividade',ch:16},
+      {modulo:'Básico',name:'Processos Básicos de Fabricação Mecânica',ch:100},
+      {modulo:'Básico',name:'Fundamentos da Tecnologia Mecânica',ch:200},
+      {modulo:'Específico I',name:'Saúde e Segurança no Trabalho',ch:12},
+      {modulo:'Específico I',name:'Introdução a Indústria 4.0',ch:24},
+      {modulo:'Específico I',name:'Planejamento e Controle da Produção',ch:100},
+      {modulo:'Específico I',name:'Processos de Fabricação Mecânica',ch:200},
+      {modulo:'Específico I',name:'Otimização de Processos de Produção Mecânica',ch:30},
+      {modulo:'Específico II',name:'Introdução ao Desenvolvimento de Projetos',ch:12},
+      {modulo:'Específico II',name:'Introdução a Controladores Lógicos Programáveis',ch:20},
+      {modulo:'Específico II',name:'Planejamento e Controle da Manutenção',ch:60},
+      {modulo:'Específico II',name:'Manutenção Mecânica Aplicada',ch:180},
+      {modulo:'Específico II',name:'Desenvolvimento de Sistemas de Automação Mecânica',ch:100},
+      {modulo:'Específico III',name:'Sustentabilidade nos Processos Industriais',ch:8},
+      {modulo:'Específico III',name:'Metodologia de Projetos',ch:58},
+      {modulo:'Específico III',name:'Projeto de Inovação em Mecânica',ch:200},
+    ]
+  },{
+    id: uid(), name:'Técnico em Eletrotécnica', ch:1360, modalidade:'Habilitação Técnica',
+    ucs:[
+      {modulo:'Básico',name:'Comunicação Oral e Escrita',ch:60},
+      {modulo:'Básico',name:'Leitura e Interpretação de Desenhos',ch:30},
+      {modulo:'Básico',name:'Eletricidade',ch:180},
+      {modulo:'Básico',name:'Q.S.MA.ST',ch:30},
+      {modulo:'Específico I',name:'Segurança em Eletricidade',ch:60},
+      {modulo:'Específico I',name:'Instalações Elétricas Prediais',ch:120},
+      {modulo:'Específico I',name:'Projetos Elétricos Prediais',ch:120},
+      {modulo:'Específico II',name:'Instalações Elétricas Industriais',ch:120},
+      {modulo:'Específico II',name:'Acionamento de Dispositivos Elétricos Automatizados',ch:75},
+      {modulo:'Específico II',name:'Projetos Elétricos Industriais',ch:105},
+      {modulo:'Específico III',name:'Instalações de Sistemas Elétricos de Potência',ch:90},
+      {modulo:'Específico III',name:'Projetos de Sistemas Elétricos de Potência',ch:60},
+      {modulo:'Específico III',name:'Gestão da Manutenção',ch:30},
+      {modulo:'Específico III',name:'Manutenção Elétricas Predial e Industrial',ch:60},
+      {modulo:'Específico III',name:'Manutenções e Operações de SEP',ch:30},
+      {modulo:'Específico III',name:'Eficiência Energética',ch:30},
+    ]
+  }];
+  saveGlobal();
+}
+
+// ═══════════════════════════════════════════
+//   NAVIGATION
+// ═══════════════════════════════════════════
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const btns = document.querySelectorAll('.sidebar-item');
+  btns.forEach(b=>{ if(b.getAttribute('onclick')===`showView('${v}')`) b.classList.add('active'); });
+  currentView = v;
+  if(v==='schedule') renderSchedule();
+  if(v==='summary') renderSummary();
+  if(v==='dashboard') updateDashboard();
+  if(v==='info') syncInfoForm();
+  if(v==='courses'){ renderCourseList(); }
+  if(v==='holidays') renderHolidays();
+}
+
+// ═══════════════════════════════════════════
+//   DASHBOARD
+// ═══════════════════════════════════════════
+function updateDashboard(){
+  document.getElementById('topbar-project-name').textContent = state.projectName || 'Nenhum projeto aberto';
+  if(!state.projectName){ document.getElementById('dashboard-summary').innerHTML=''; return; }
+  const totalSched = calcTotalScheduled();
+  const totalCH = parseInt(state.info.chtotal)||0;
+  const pct = totalCH ? Math.round(totalSched/totalCH*100) : 0;
+  document.getElementById('dashboard-summary').innerHTML=`
+    <div class="summary-strip">
+      <div class="summary-item"><div class="label">Evento</div><div class="value">${state.info.evento||'—'}</div><div class="sub">${state.info.curso||''}</div></div>
+      <div class="summary-item"><div class="label">CH Total</div><div class="value">${totalCH}h</div><div class="sub">Total do curso</div></div>
+      <div class="summary-item"><div class="label">CH Agendada</div><div class="value">${totalSched}h</div><div class="sub">${pct}% concluído</div></div>
+      <div class="summary-item"><div class="label">Meses</div><div class="value">${state.months.length}</div><div class="sub">no cronograma</div></div>
+      <div class="summary-item"><div class="label">Coordenador</div><div class="value" style="font-size:15px">${state.info.coord||'—'}</div><div class="sub">${state.info.cidade||''}</div></div>
+    </div>
+    <div class="prog-bar" style="height:8px"><div class="prog-bar-fill ${pct>=100?'over':''}" style="width:${Math.min(pct,100)}%"></div></div>
+    <p style="font-size:12px;color:var(--gray-500);margin-top:6px">${pct}% da carga horária agendada</p>
+  `;
+}
+
+function calcTotalScheduled(){
+  let t=0;
+  for(const mk in state.rows) state.rows[mk].forEach(r=>{ for(const d in r.days) t+=Number(r.days[d])||0; });
+  return t;
+}
+
+// ═══════════════════════════════════════════
+//   INFO FORM
+// ═══════════════════════════════════════════
+function syncInfoForm(){
+  const f = state.info;
+  ['evento','curso','sala','coord','horario','cidade','chtotal'].forEach(k=>{
+    const el=document.getElementById('inf-'+k);
+    if(el) el.value=f[k]||'';
+  });
+  document.getElementById('inf-modalidade').value=f.modalidade||'Habilitação Técnica';
+  renderMonthChips();
+}
+
+function saveInfo(){
+  ['evento','curso','sala','coord','horario','cidade','chtotal'].forEach(k=>{
+    const el=document.getElementById('inf-'+k);
+    if(el) state.info[k]=el.value;
+  });
+  state.info.modalidade=document.getElementById('inf-modalidade').value;
+  updateDashboard();
+  toast('Informações salvas','success');
+}
+
+// ═══════════════════════════════════════════
+//   MONTHS
+// ═══════════════════════════════════════════
+function renderMonthChips(){
+  const c=document.getElementById('month-chips');
+  c.innerHTML='';
+  state.months.forEach((m,i)=>{
+    const label=monthLabel(m.year,m.month);
+    const chip=document.createElement('div');
+    chip.className='month-chip active';
+    chip.innerHTML=`${label} <span class="del" onclick="removeMonth(${i})" title="Remover">×</span>`;
+    c.appendChild(chip);
+  });
+  if(!state.months.length) c.innerHTML='<span style="font-size:13px;color:var(--gray-400)">Nenhum mês adicionado. Use o botão "Adicionar Mês".</span>';
+}
+
+function addMonthModal(){
+  const today=new Date();
+  document.getElementById('month-input').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  openModal('modal-month');
+}
+
+function addMonth(){
+  const val=document.getElementById('month-input').value;
+  if(!val){ toast('Selecione um mês','error'); return; }
+  const [y,m]=val.split('-').map(Number);
+  const monthIdx=m-1;
+  if(state.months.find(x=>x.year===y&&x.month===monthIdx)){ toast('Mês já adicionado','error'); closeModal('modal-month'); return; }
+  state.months.push({year:y,month:monthIdx});
+  state.months.sort((a,b)=>a.year*12+a.month - (b.year*12+b.month));
+  const mk=monthKey(y,monthIdx);
+  if(!state.rows[mk]) state.rows[mk]=[];
+  renderMonthChips();
+  closeModal('modal-month');
+  toast('Mês adicionado','success');
+  if(currentView==='schedule') renderSchedule();
+  if(currentView==='info') document.getElementById('sched-subtitle')&&null;
+}
+
+function removeMonth(i){
+  if(!confirm('Remover este mês do cronograma? Os dados de aulas deste mês serão perdidos.')) return;
+  const m=state.months[i];
+  const mk=monthKey(m.year,m.month);
+  delete state.rows[mk];
+  state.months.splice(i,1);
+  renderMonthChips();
+  if(currentView==='schedule') renderSchedule();
+  toast('Mês removido');
+}
+
+function monthKey(y,m){ return `${y}-${String(m).padStart(2,'0')}`; }
+function monthLabel(y,m){
+  return new Date(y,m,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+}
+
+// ═══════════════════════════════════════════
+//   SCHEDULE RENDER
+// ═══════════════════════════════════════════
+const DIAS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+function renderSchedule(){
+  const c=document.getElementById('schedule-container');
+  c.innerHTML='';
+  if(!state.months.length){
+    c.innerHTML=`<div class="empty-state" style="padding:60px"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><rect x="6" y="8" width="36" height="34" rx="3"/><path d="M16 4v8M32 4v8M6 18h36"/></svg><p>Nenhum mês adicionado. Vá em <strong>Informações do Evento</strong> e adicione meses ao cronograma.</p></div>`;
+    return;
+  }
+  state.months.forEach(m=>{ c.appendChild(buildMonthBlock(m.year,m.month)); });
+}
+
+function buildMonthBlock(year,month){
+  const mk=monthKey(year,month);
+  if(!state.rows[mk]) state.rows[mk]=[];
+  const rows=state.rows[mk];
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const firstDow=new Date(year,month,1).getDay();
+  const hols=getHolidaySet(year,month);
+  
+  const wrap=document.createElement('div');
+  wrap.className='month-block';
+  
+  // Month header
+  const head=document.createElement('div');
+  head.className='month-header';
+  const mLabel=monthLabel(year,month);
+  head.innerHTML=`<span class="month-name">${mLabel}</span>
+    <span class="month-hours" id="mh-${mk}"></span>
+    <div class="month-actions">
+      <button onclick="addRowToMonth('${mk}')">+ Linha</button>
+    </div>`;
+  wrap.appendChild(head);
+  
+  // Table
+  const table=document.createElement('table');
+  table.className='cal-table';
+  table.id='table-'+mk;
+  
+  // Header row
+  const thead=document.createElement('thead');
+  let thHTML=`<tr>
+    <th class="col-uc">Componente Curricular</th>
+    <th class="col-prof">Docente</th>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const dow=(firstDow+d-1)%7;
+    const isWk=dow===0||dow===6;
+    const dayIso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hType=hols[dayIso];
+    let extra='';
+    if(hType) extra=` title="${hType.desc}"`;
+    thHTML+=`<th class="col-day"${extra}><span class="day-num">${d}</span><span class="day-name">${DIAS[dow]}</span></th>`;
+  }
+  thHTML+=`<th class="col-total">CH Mês</th><th class="col-prog">Total / Meta</th></tr>`;
+  thead.innerHTML=thHTML;
+  table.appendChild(thead);
+  
+  const tbody=document.createElement('tbody');
+  table.appendChild(tbody);
+  
+  wrap.appendChild(table);
+  
+  // Render rows
+  rows.forEach((row,ri)=>{ tbody.appendChild(buildRow(mk,ri,daysInMonth,firstDow,hols)); });
+  
+  // Add row button
+  const addWrap=document.createElement('div');
+  addWrap.style.cssText='padding:10px 14px;background:#fff;border:1px solid var(--gray-200);border-top:none;border-radius:0 0 8px 8px';
+  addWrap.innerHTML=`<button class="add-row-btn" onclick="addRowToMonth('${mk}')">+ Adicionar Componente</button>`;
+  wrap.appendChild(addWrap);
+  
+  updateMonthHeader(mk);
+  return wrap;
+}
+
+function buildRow(mk, ri, daysInMonth, firstDow, hols){
+  const rows=state.rows[mk];
+  const row=rows[ri];
+  const year=parseInt(mk.split('-')[0]);
+  const month=parseInt(mk.split('-')[1]);
+  
+  const tr=document.createElement('tr');
+  tr.id=`row-${mk}-${ri}`;
+  
+  // UC cell
+  const tdUC=document.createElement('td');
+  tdUC.className='col-uc';
+  tdUC.style.cssText='position:relative';
+  
+  // build uc options from course
+  const ucOptions=getUCOptions(mk);
+  
+  const sel=document.createElement('select');
+  sel.className='uc-select';
+  sel.innerHTML=`<option value="">— Selecionar —</option>${ucOptions.map(u=>`<option value="${esc(u.name)}" ${row.uc===u.name?'selected':''}>${esc(u.name)}</option>`).join('')}<option value="__custom__">Digitar manualmente...</option>`;
+  sel.onchange=()=>{ if(sel.value==='__custom__'){ const v=prompt('Nome da componente:'); if(v){ row.uc=v; renderSchedule(); return; } sel.value=row.uc||''; return; } row.uc=sel.value; syncUCMeta(mk,ri); };
+  
+  const customInput=document.createElement('input');
+  customInput.className='prof-input';
+  customInput.placeholder='ou digitar...';
+  customInput.value=row.uc&&!ucOptions.find(u=>u.name===row.uc)?row.uc:'';
+  customInput.style.cssText='display:none;margin-top:4px;font-size:12px;color:var(--gray-500)';
+  customInput.oninput=()=>{ row.uc=customInput.value; };
+  
+  tdUC.appendChild(sel);
+  tdUC.appendChild(customInput);
+  // del button
+  const del=document.createElement('button');
+  del.className='del-row-btn';
+  del.title='Remover linha';
+  del.innerHTML='×';
+  del.style.cssText='position:absolute;right:6px;top:50%;transform:translateY(-50%)';
+  del.onclick=()=>{ if(confirm('Remover esta linha?')){ rows.splice(ri,1); renderSchedule(); } };
+  tdUC.appendChild(del);
+  tr.appendChild(tdUC);
+  
+  // Prof cell
+  const tdProf=document.createElement('td');
+  tdProf.className='col-prof';
+  const profInp=document.createElement('input');
+  profInp.className='prof-input';
+  profInp.placeholder='Docente';
+  profInp.value=row.prof||'';
+  profInp.oninput=()=>{ row.prof=profInp.value; };
+  tdProf.appendChild(profInp);
+  tr.appendChild(tdProf);
+  
+  // Day cells
+  for(let d=1;d<=daysInMonth;d++){
+    const dow=(firstDow+d-1)%7;
+    const isWk=dow===0||dow===6;
+    const dayIso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hType=hols[dayIso];
+    const td=document.createElement('td');
+    td.className='col-day-cell'+(isWk?' weekend':'')+(hType?' '+(hType.type==='remat'?'remat':'holiday'):'');
+    const val=row.days&&row.days[d]?row.days[d]:'';
+    const inp=document.createElement('input');
+    inp.className='ch-input';
+    inp.type='text';
+    inp.inputMode='numeric';
+    inp.value=val;
+    inp.readOnly=true;
+    inp.onclick=()=>openCellPopup(mk,ri,d,inp);
+    td.appendChild(inp);
+    tr.appendChild(td);
+  }
+  
+  // Total cell
+  const tdTotal=document.createElement('td');
+  tdTotal.className='col-total';
+  tdTotal.id=`total-${mk}-${ri}`;
+  tdTotal.textContent=rowMonthTotal(row);
+  tr.appendChild(tdTotal);
+  
+  // Prog cell
+  const tdProg=document.createElement('td');
+  tdProg.className='col-prog';
+  tdProg.id=`prog-${mk}-${ri}`;
+  updateRowProg(mk,ri,tdProg);
+  tr.appendChild(tdProg);
+  
+  return tr;
+}
+
+function getUCOptions(mk){
+  const courseId=state.info.courseId;
+  if(courseId){
+    const course=state.courses.find(c=>c.id===courseId);
+    if(course) return course.ucs||[];
+  }
+  // fallback: collect all from all courses
+  const all=[];
+  state.courses.forEach(c=>(c.ucs||[]).forEach(u=>{ if(!all.find(x=>x.name===u.name)) all.push(u); }));
+  return all;
+}
+
+function syncUCMeta(mk,ri){
+  const row=state.rows[mk][ri];
+  const courseId=state.info.courseId;
+  if(courseId){
+    const course=state.courses.find(c=>c.id===courseId);
+    if(course){
+      const uc=course.ucs.find(u=>u.name===row.uc);
+      if(uc) row.ucTotalCH=uc.ch;
+    }
+  }
+  updateRowProg(mk,ri);
+}
+
+function rowMonthTotal(row){
+  if(!row.days) return 0;
+  return Object.values(row.days).reduce((s,v)=>s+Number(v||0),0);
+}
+
+function rowAllTotal(uc){
+  let t=0;
+  for(const mk in state.rows) state.rows[mk].forEach(r=>{ if(r.uc===uc) t+=rowMonthTotal(r); });
+  return t;
+}
+
+function rowUCTargetCH(ucName){
+  for(const c of state.courses){ const u=(c.ucs||[]).find(x=>x.name===ucName); if(u) return u.ch; }
+  return 0;
+}
+
+function updateRowProg(mk,ri,cell){
+  const row=state.rows[mk]&&state.rows[mk][ri];
+  if(!row) return;
+  const el=cell||document.getElementById(`prog-${mk}-${ri}`);
+  if(!el) return;
+  const totalAll=rowAllTotal(row.uc);
+  const target=rowUCTargetCH(row.uc)||row.ucTotalCH||0;
+  el.textContent=target?`${totalAll} / ${target}h`:`${rowMonthTotal(row)}h`;
+}
+
+function updateMonthHeader(mk){
+  const el=document.getElementById('mh-'+mk);
+  if(!el) return;
+  const rows=state.rows[mk]||[];
+  const total=rows.reduce((s,r)=>s+rowMonthTotal(r),0);
+  el.textContent=total?`${total}h agendadas`:'';
+}
+
+function addRowToMonth(mk){
+  if(!state.rows[mk]) state.rows[mk]=[];
+  state.rows[mk].push({uc:'',prof:'',days:{}});
+  renderSchedule();
+  // scroll to bottom of month
+}
+
+// ═══════════════════════════════════════════
+//   CELL POPUP
+// ═══════════════════════════════════════════
+function openCellPopup(mk,ri,day,inputEl){
+  cellPopupData={mk,ri,day,inputEl};
+  const row=state.rows[mk][ri];
+  const val=(row.days&&row.days[day])||'';
+  const [y,m]=mk.split('-').map(Number);
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const firstDow=new Date(y,m,1).getDay();
+  const dow=(firstDow+day-1)%7;
+  document.getElementById('cell-popup-label').textContent=`${DIAS[dow]}, ${day}/${m+1}/${y}`;
+  document.getElementById('cell-popup-val').value=val||'';
+  const rect=inputEl.getBoundingClientRect();
+  const popup=document.getElementById('cell-popup');
+  popup.style.display='block';
+  let top=rect.bottom+6; let left=rect.left;
+  if(left+220>window.innerWidth) left=window.innerWidth-230;
+  if(top+160>window.innerHeight) top=rect.top-170;
+  popup.style.top=top+'px'; popup.style.left=left+'px';
+  document.getElementById('cell-popup-val').focus();
+  document.getElementById('cell-popup-val').select();
+}
+
+function applyCellPopup(){
+  if(!cellPopupData) return;
+  const {mk,ri,day,inputEl}=cellPopupData;
+  const val=parseInt(document.getElementById('cell-popup-val').value)||0;
+  if(!state.rows[mk][ri].days) state.rows[mk][ri].days={};
+  if(val>0) state.rows[mk][ri].days[day]=val; else delete state.rows[mk][ri].days[day];
+  inputEl.value=val||'';
+  document.getElementById(`total-${mk}-${ri}`).textContent=rowMonthTotal(state.rows[mk][ri]);
+  updateRowProg(mk,ri);
+  updateMonthHeader(mk);
+  updateDashboard();
+  closeCellPopup();
+}
+
+function clearCell(){
+  if(!cellPopupData) return;
+  const {mk,ri,day,inputEl}=cellPopupData;
+  if(state.rows[mk][ri].days) delete state.rows[mk][ri].days[day];
+  inputEl.value='';
+  document.getElementById(`total-${mk}-${ri}`).textContent=rowMonthTotal(state.rows[mk][ri]);
+  updateRowProg(mk,ri);
+  updateMonthHeader(mk);
+  closeCellPopup();
+}
+
+function closeCellPopup(){
+  document.getElementById('cell-popup').style.display='none';
+  cellPopupData=null;
+}
+
+document.addEventListener('click',e=>{
+  const popup=document.getElementById('cell-popup');
+  if(popup.style.display==='block' && !popup.contains(e.target) && !e.target.classList.contains('ch-input'))
+    closeCellPopup();
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&cellPopupData) applyCellPopup();
+  if(e.key==='Escape') closeCellPopup();
+});
+
+// ═══════════════════════════════════════════
+//   HOLIDAYS
+// ═══════════════════════════════════════════
+function getHolidaySet(year,month){
+  const map={};
+  state.holidays.forEach(h=>{
+    let start=new Date(h.start+'T00:00:00');
+    let end=new Date((h.end||h.start)+'T00:00:00');
+    if(h.annual){ start=new Date(year,start.getMonth(),start.getDate()); end=new Date(year,end.getMonth(),end.getDate()); }
+    let cur=new Date(start);
+    while(cur<=end){
+      if(cur.getFullYear()===year&&cur.getMonth()===month){
+        const iso=cur.toISOString().split('T')[0];
+        map[iso]={type:h.type,desc:h.desc};
+      }
+      cur.setDate(cur.getDate()+1);
+    }
+  });
+  return map;
+}
+
+function openHolidayModal(){
+  document.getElementById('hol-start').value='';
+  document.getElementById('hol-end').value='';
+  document.getElementById('hol-desc').value='';
+  document.getElementById('hol-type').value='feriado';
+  document.getElementById('hol-annual').checked=false;
+  openModal('modal-holiday');
+}
+
+function saveHoliday(){
+  const start=document.getElementById('hol-start').value;
+  const end=document.getElementById('hol-end').value||start;
+  const desc=document.getElementById('hol-desc').value.trim();
+  const type=document.getElementById('hol-type').value;
+  const annual=document.getElementById('hol-annual').checked;
+  if(!start||!desc){ toast('Preencha data e descrição','error'); return; }
+  state.holidays.push({id:uid(),start,end,desc,type,annual});
+  state.holidays.sort((a,b)=>a.start.localeCompare(b.start));
+  saveGlobal();
+  renderHolidays();
+  closeModal('modal-holiday');
+  toast('Adicionado','success');
+  if(currentView==='schedule') renderSchedule();
+}
+
+function renderHolidays(){
+  const g=document.getElementById('holiday-grid');
+  if(!g) return;
+  const filtered=holidayFilter==='all'?state.holidays:state.holidays.filter(h=>h.type===holidayFilter);
+  if(!filtered.length){ g.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><p>Nenhum registro encontrado. Use o botão "+ Adicionar".</p></div>`; return; }
+  g.innerHTML=filtered.map(h=>{
+    const tagClass={'feriado':'feriado','recesso':'recesso','remat':'remat'}[h.type]||'feriado';
+    const tagLabel={'feriado':'Feriado','recesso':'Recesso','remat':'Rematrícula'}[h.type]||h.type;
+    const dateStr=h.end&&h.end!==h.start?`${fmtDate(h.start)} – ${fmtDate(h.end)}`:fmtDate(h.start);
+    return `<div class="holiday-card">
+      <div class="holiday-card-head">
+        <div class="dot" style="background:${h.type==='feriado'?'var(--red-600)':h.type==='remat'?'var(--blue-600)':'var(--amber-600)'}"></div>
+        <div>
+          <div class="title" style="color:${h.type==='feriado'?'var(--red-600)':h.type==='remat'?'var(--blue-700)':'var(--amber-600)'}">${esc(h.desc)}</div>
+          <div style="font-size:11px;color:var(--gray-500);margin-top:1px">${dateStr}${h.annual?' · Anual':''}</div>
+        </div>
+        <span class="holiday-type-tag ${tagClass}">${tagLabel}</span>
+        <button class="del-btn" onclick="deleteHoliday('${h.id}')">×</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteHoliday(id){
+  if(!confirm('Remover este registro?')) return;
+  state.holidays=state.holidays.filter(h=>h.id!==id);
+  saveGlobal();
+  renderHolidays();
+  if(currentView==='schedule') renderSchedule();
+}
+
+function filterHoliday(f){
+  holidayFilter=f;
+  document.querySelectorAll('[id^="hf-"]').forEach(b=>{ b.style.borderColor=''; b.style.color=''; });
+  const el=document.getElementById('hf-'+f);
+  if(el){ el.style.borderColor='var(--blue-400)'; el.style.color='var(--blue-600)'; }
+  renderHolidays();
+}
+
+function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+
+// ═══════════════════════════════════════════
+//   COURSES
+// ═══════════════════════════════════════════
+function renderCourseList(){
+  const list=document.getElementById('course-list');
+  const count=document.getElementById('course-count');
+  if(!list) return;
+  count.textContent=state.courses.length;
+  if(!state.courses.length){ list.innerHTML=`<div class="empty-state" style="padding:30px"><p>Nenhum curso cadastrado.</p></div>`; return; }
+  list.innerHTML=state.courses.map(c=>`
+    <div class="course-list-item ${c.id===currentCourseId?'selected':''}" onclick="selectCourse('${c.id}')">
+      <div>
+        <div class="name">${esc(c.name)}</div>
+        <div class="info">${c.ch}h · ${c.ucs?c.ucs.length:0} componentes</div>
+      </div>
+    </div>`).join('');
+  // populate new project course selector
+  const sel=document.getElementById('new-proj-curso');
+  if(sel){ sel.innerHTML=`<option value="">— Selecionar curso —</option>`+state.courses.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join(''); }
+}
+
+function selectCourse(id){
+  currentCourseId=id;
+  renderCourseList();
+  renderCourseDetail(id);
+}
+
+function renderCourseDetail(id){
+  const course=state.courses.find(c=>c.id===id);
+  const panel=document.getElementById('course-detail');
+  if(!course){ panel.innerHTML=`<div class="empty-state"><p>Curso não encontrado.</p></div>`; return; }
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:17px;font-weight:700;color:var(--gray-900)">${esc(course.name)}</div>
+        <div style="font-size:12px;color:var(--gray-500);margin-top:2px">${course.modalidade} · ${course.ch}h total</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="editCourseModal('${id}')">Editar Curso</button>
+        <button class="btn btn-sm danger" onclick="deleteCourse('${id}')">Excluir</button>
+      </div>
+    </div>
+    <div class="uc-table-wrap">
+      <table class="uc-table" id="uc-table-${id}">
+        <thead><tr><th style="width:120px">Módulo</th><th>Componente Curricular</th><th style="width:80px;text-align:center">CH (h)</th><th style="width:36px"></th></tr></thead>
+        <tbody id="uc-tbody-${id}">
+          ${(course.ucs||[]).map((u,i)=>`<tr>
+            <td><input value="${esc(u.modulo)}" oninput="updateUC('${id}',${i},'modulo',this.value)" placeholder="Módulo" style="width:100%;border:none;font-family:var(--font);font-size:13px;outline:none;background:transparent"></td>
+            <td><input value="${esc(u.name)}" oninput="updateUC('${id}',${i},'name',this.value)" placeholder="Nome da componente" style="width:100%;border:none;font-family:var(--font);font-size:13px;outline:none;background:transparent"></td>
+            <td><input type="number" value="${u.ch}" oninput="updateUC('${id}',${i},'ch',parseInt(this.value)||0)" style="width:70px;border:none;font-family:var(--font);font-size:13px;text-align:center;outline:none;background:transparent"></td>
+            <td><button class="del-row-btn" onclick="deleteUC('${id}',${i})">×</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <button class="add-row-btn" onclick="addUC('${id}')">+ Adicionar Componente Curricular</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+      <span style="font-size:12px;color:var(--gray-500)">CH total: <strong>${(course.ucs||[]).reduce((s,u)=>s+u.ch,0)}h</strong> de <strong>${course.ch}h</strong></span>
+      <button class="btn btn-sm success" onclick="saveCourseEdits('${id}')">Salvar alterações</button>
+    </div>`;
+}
+
+function updateUC(courseId,i,field,val){ const c=state.courses.find(x=>x.id===courseId); if(c&&c.ucs[i]) c.ucs[i][field]=val; }
+
+function addUC(id){
+  const c=state.courses.find(x=>x.id===id);
+  if(!c) return;
+  if(!c.ucs) c.ucs=[];
+  c.ucs.push({modulo:'',name:'',ch:0});
+  renderCourseDetail(id);
+}
+
+function deleteUC(id,i){
+  const c=state.courses.find(x=>x.id===id);
+  if(!c) return;
+  c.ucs.splice(i,1);
+  renderCourseDetail(id);
+}
+
+function saveCourseEdits(id){
+  saveGlobal();
+  renderCourseList();
+  toast('Curso salvo','success');
+}
+
+function deleteCourse(id){
+  if(!confirm('Excluir este curso? Esta ação não pode ser desfeita.')) return;
+  state.courses=state.courses.filter(c=>c.id!==id);
+  currentCourseId=null;
+  saveGlobal();
+  renderCourseList();
+  document.getElementById('course-detail').innerHTML=`<div class="empty-state"><p>Selecione um curso para ver suas componentes</p></div>`;
+  toast('Curso excluído');
+}
+
+function openNewCourseModal(id){
+  document.getElementById('modal-course-title').textContent='Novo Curso';
+  document.getElementById('course-name-input').value='';
+  document.getElementById('course-ch-input').value='';
+  document.getElementById('course-modal-input').value='Habilitação Técnica';
+  openModal('modal-course');
+}
+
+function editCourseModal(id){
+  const c=state.courses.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('modal-course-title').textContent='Editar Curso';
+  document.getElementById('course-name-input').value=c.name;
+  document.getElementById('course-ch-input').value=c.ch;
+  document.getElementById('course-modal-input').value=c.modalidade;
+  document.getElementById('modal-course').dataset.editId=id;
+  openModal('modal-course');
+}
+
+function saveCourse(){
+  const name=document.getElementById('course-name-input').value.trim();
+  const ch=parseInt(document.getElementById('course-ch-input').value)||0;
+  const modalidade=document.getElementById('course-modal-input').value;
+  if(!name){ toast('Nome obrigatório','error'); return; }
+  const editId=document.getElementById('modal-course').dataset.editId;
+  if(editId){
+    const c=state.courses.find(x=>x.id===editId);
+    if(c){ c.name=name; c.ch=ch; c.modalidade=modalidade; }
+    delete document.getElementById('modal-course').dataset.editId;
+  } else {
+    state.courses.push({id:uid(),name,ch,modalidade,ucs:[]});
+  }
+  saveGlobal();
+  renderCourseList();
+  closeModal('modal-course');
+  toast('Curso salvo','success');
+}
+
+// ═══════════════════════════════════════════
+//   SUMMARY
+// ═══════════════════════════════════════════
+function renderSummary(){
+  const el=document.getElementById('summary-content');
+  if(!state.projectName){ el.innerHTML=`<div class="empty-state"><p>Abra ou crie um projeto primeiro.</p></div>`; return; }
+  
+  // Aggregate by UC name
+  const ucMap={};
+  for(const mk in state.rows){
+    state.rows[mk].forEach(r=>{
+      if(!r.uc) return;
+      if(!ucMap[r.uc]) ucMap[r.uc]={total:0,target:rowUCTargetCH(r.uc)};
+      ucMap[r.uc].total+=rowMonthTotal(r);
+    });
+  }
+  
+  const totalSched=Object.values(ucMap).reduce((s,v)=>s+v.total,0);
+  const totalCH=parseInt(state.info.chtotal)||0;
+  const pct=totalCH?Math.round(totalSched/totalCH*100):0;
+  
+  let html=`<div class="summary-strip">
+    <div class="summary-item"><div class="label">CH Agendada</div><div class="value">${totalSched}h</div></div>
+    <div class="summary-item"><div class="label">CH Total</div><div class="value">${totalCH}h</div></div>
+    <div class="summary-item"><div class="label">Progresso</div><div class="value">${pct}%</div></div>
+    <div class="summary-item"><div class="label">Componentes</div><div class="value">${Object.keys(ucMap).length}</div></div>
+  </div>`;
+  
+  html+=`<div class="table-wrap"><table class="data-table"><thead><tr>
+    <th>Componente Curricular</th><th>CH Agendada</th><th>Meta</th><th>Progresso</th><th>Status</th>
+  </tr></thead><tbody>`;
+  
+  for(const ucName in ucMap){
+    const {total,target}=ucMap[ucName];
+    const p=target?Math.round(total/target*100):null;
+    const badge=p===null?`<span class="badge badge-gray">S/ meta</span>`:p>=100?`<span class="badge badge-green">Concluído</span>`:p>50?`<span class="badge badge-blue">Em andamento</span>`:`<span class="badge badge-amber">Iniciado</span>`;
+    const barPct=p?Math.min(p,100):0;
+    html+=`<tr>
+      <td style="font-weight:500">${esc(ucName)}</td>
+      <td>${total}h</td>
+      <td>${target?target+'h':'—'}</td>
+      <td style="min-width:120px"><div class="prog-bar"><div class="prog-bar-fill ${p>=100?'over':''}" style="width:${barPct}%"></div></div><span style="font-size:11px;color:var(--gray-500)">${p!==null?p+'%':''}</span></td>
+      <td>${badge}</td>
+    </tr>`;
+  }
+  
+  if(!Object.keys(ucMap).length) html+=`<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:30px">Nenhuma aula agendada ainda.</td></tr>`;
+  
+  html+=`</tbody></table></div>`;
+  el.innerHTML=html;
+}
+
+// ═══════════════════════════════════════════
+//   PROJECT MANAGEMENT
+// ═══════════════════════════════════════════
+function openNewProjectModal(){
+  document.getElementById('new-proj-name').value='';
+  document.getElementById('new-proj-evento').value='';
+  document.getElementById('new-proj-coord').value='';
+  document.getElementById('new-proj-cidade').value='Itumbiara - GO';
+  document.getElementById('new-proj-sala').value='';
+  document.getElementById('new-proj-horario').value='';
+  renderCourseList(); // refresh select
+  openModal('modal-new');
+}
+
+function createNewProject(){
+  const name=document.getElementById('new-proj-name').value.trim();
+  if(!name){ toast('Informe o nome do projeto','error'); return; }
+  state.projectName=name;
+  state.info={
+    evento:document.getElementById('new-proj-evento').value,
+    curso:'',sala:document.getElementById('new-proj-sala').value,
+    coord:document.getElementById('new-proj-coord').value,
+    horario:document.getElementById('new-proj-horario').value,
+    cidade:document.getElementById('new-proj-cidade').value,
+    modalidade:'Habilitação Técnica',chtotal:0
+  };
+  const courseId=document.getElementById('new-proj-curso').value;
+  if(courseId){
+    const c=state.courses.find(x=>x.id===courseId);
+    if(c){ state.info.curso=c.name; state.info.chtotal=c.ch; state.info.courseId=courseId; }
+  }
+  state.months=[]; state.rows={};
+  closeModal('modal-new');
+  updateDashboard();
+  syncInfoForm();
+  showView('info');
+  toast('Projeto criado! Adicione os meses e comece a preencher.','success');
+}
+
+function saveProject(){
+  if(!state.projectName){ toast('Crie ou abra um projeto primeiro','error'); return; }
+  const data={...state};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=(state.projectName||'cronograma').replace(/[^a-zA-Z0-9À-ú ]/g,'_')+'.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Projeto salvo!','success');
+}
+
+function triggerOpen(){ document.getElementById('file-input').click(); }
+
+function loadProjectFile(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      // load project state but keep global courses/holidays merged
+      state.projectName=d.projectName||'';
+      state.info=d.info||{};
+      state.months=d.months||[];
+      state.rows=d.rows||{};
+      // merge courses and holidays from file (don't overwrite global, add new)
+      if(d.courses) d.courses.forEach(c=>{ if(!state.courses.find(x=>x.id===c.id)) state.courses.push(c); });
+      if(d.holidays) d.holidays.forEach(h=>{ if(!state.holidays.find(x=>x.id===h.id)) state.holidays.push(h); });
+      saveGlobal();
+      renderCourseList(); renderHolidays(); updateDashboard(); syncInfoForm();
+      showView('dashboard');
+      toast('Projeto carregado!','success');
+    }catch(err){ toast('Arquivo inválido','error'); }
+    e.target.value='';
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════
+//   EXPORT HTML
+// ═══════════════════════════════════════════
+function exportProject(){
+  if(!state.projectName){ toast('Crie ou abra um projeto primeiro','error'); return; }
+  const html=generateExportHTML();
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=(state.projectName||'cronograma').replace(/[^a-zA-Z0-9À-ú ]/g,'_')+'.html';
+  a.click(); URL.revokeObjectURL(url);
+  toast('HTML exportado!','success');
+}
+
+function generateExportHTML(){
+  const info=state.info;
+  let monthsHTML='';
+  
+  state.months.forEach(({year,month})=>{
+    const mk=monthKey(year,month);
+    const rows=state.rows[mk]||[];
+    const daysInMonth=new Date(year,month+1,0).getDate();
+    const firstDow=new Date(year,month,1).getDay();
+    const hols=getHolidaySet(year,month);
+    const mLabel=monthLabel(year,month);
+    const monthTotal=rows.reduce((s,r)=>s+rowMonthTotal(r),0);
+    
+    let headRow=`<tr style="background:#1a3a5c;color:#fff;font-size:11px">
+      <th style="padding:8px 12px;text-align:left;min-width:200px">Componente Curricular</th>
+      <th style="padding:8px 10px;text-align:left;min-width:130px">Docente</th>`;
+    for(let d=1;d<=daysInMonth;d++){
+      const dow=(firstDow+d-1)%7;
+      headRow+=`<th style="padding:6px 3px;text-align:center;min-width:28px;font-size:10px"><div style="font-size:11px;font-weight:700">${d}</div><div style="font-size:9px;opacity:.7">${DIAS[dow]}</div></th>`;
+    }
+    headRow+=`<th style="padding:8px;text-align:center;min-width:55px">CH Mês</th><th style="padding:8px;text-align:center;min-width:75px">Total/Meta</th></tr>`;
+    
+    let rowsHTML='';
+    rows.forEach(row=>{
+      const monthTot=rowMonthTotal(row);
+      const totalAll=rowAllTotal(row.uc);
+      const target=rowUCTargetCH(row.uc);
+      let dCells='';
+      for(let d=1;d<=daysInMonth;d++){
+        const dow=(firstDow+d-1)%7;
+        const isWk=dow===0||dow===6;
+        const dayIso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const hType=hols[dayIso];
+        let bg=isWk?'#fef3c7':'#fff';
+        if(hType) bg=hType.type==='remat'?'#dbeafe':'#fee2e2';
+        const val=row.days&&row.days[d]?row.days[d]:'';
+        dCells+=`<td style="text-align:center;background:${bg};border:1px solid #e5e7eb;padding:4px 2px;font-size:12px;font-weight:600;color:#1d4ed8">${val}</td>`;
+      }
+      rowsHTML+=`<tr>
+        <td style="padding:8px 12px;border-bottom:1px solid #f3f4f6;font-size:12.5px">${esc(row.uc)}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;font-size:12px;color:#6b7280;background:#f9fafb">${esc(row.prof)}</td>
+        ${dCells}
+        <td style="text-align:center;padding:8px;border:1px solid #e5e7eb;font-weight:700;color:#1d4ed8;background:#eff6ff">${monthTot}h</td>
+        <td style="text-align:center;padding:8px;border:1px solid #e5e7eb;font-size:12px;color:#374151">${target?`${totalAll}/${target}h`:`${monthTot}h`}</td>
+      </tr>`;
+    });
+    
+    monthsHTML+=`<div style="margin-bottom:28px;page-break-inside:avoid">
+      <div style="background:#0a2540;color:#fff;padding:12px 16px;border-radius:8px 8px 0 0;display:flex;align-items:center;gap:14px">
+        <span style="font-size:15px;font-weight:700;text-transform:capitalize">${mLabel}</span>
+        ${monthTotal?`<span style="color:#93c5fd;font-size:12px;margin-left:auto">${monthTotal}h agendadas</span>`:''}
+      </div>
+      <div style="overflow-x:auto;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
+        <table style="width:100%;border-collapse:collapse;min-width:800px">
+          <thead>${headRow}</thead>
+          <tbody>${rowsHTML||'<tr><td colspan="100" style="padding:20px;text-align:center;color:#9ca3af;font-size:13px">Nenhuma aula agendada</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>`;
+  });
+  
+  const totalSched=calcTotalScheduled();
+  const totalCH=parseInt(info.chtotal)||0;
+  const pct=totalCH?Math.round(totalSched/totalCH*100):0;
+  
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cronograma — ${esc(state.projectName)}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:#f9fafb;color:#111827}@media print{body{background:#fff}.no-print{display:none}}</style>
+</head>
+<body>
+<div style="background:#0a2540;color:#fff;padding:18px 32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+  <div style="background:#1d4ed8;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700">S</div>
+  <div><div style="font-size:20px;font-weight:700">Cronograma de Aulas</div><div style="font-size:14px;color:#93c5fd">${esc(info.curso||state.projectName)}</div></div>
+  <div style="margin-left:auto;text-align:right;font-size:12px;color:#93c5fd">Gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
+</div>
+<div style="background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 32px;display:flex;gap:32px;flex-wrap:wrap">
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Evento</span><div style="font-weight:600;font-size:14px">${esc(info.evento)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Coordenador</span><div style="font-weight:600;font-size:14px">${esc(info.coord)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Sala</span><div style="font-weight:600;font-size:14px">${esc(info.sala)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Horário</span><div style="font-weight:600;font-size:14px">${esc(info.horario)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Cidade</span><div style="font-weight:600;font-size:14px">${esc(info.cidade)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">Modalidade</span><div style="font-weight:600;font-size:14px">${esc(info.modalidade)}</div></div>
+  <div><span style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:600">CH Total</span><div style="font-weight:700;font-size:16px;color:#1d4ed8">${totalSched}h / ${totalCH}h (${pct}%)</div></div>
+</div>
+<div style="max-width:1600px;margin:0 auto;padding:24px 24px">
+  <div style="margin-bottom:8px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12px">
+    <span><span style="display:inline-block;width:12px;height:12px;background:#fef3c7;border:1px solid #f59e0b;border-radius:2px;vertical-align:middle;margin-right:3px"></span>Fim de semana</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#fee2e2;border:1px solid #ef4444;border-radius:2px;vertical-align:middle;margin-right:3px"></span>Feriado/Recesso</span>
+    <span><span style="display:inline-block;width:12px;height:12px;background:#dbeafe;border:1px solid #3b82f6;border-radius:2px;vertical-align:middle;margin-right:3px"></span>Rematrícula</span>
+  </div>
+  ${monthsHTML||'<p style="color:#9ca3af;padding:40px;text-align:center">Nenhum mês configurado.</p>'}
+</div>
+</body></html>`;
+}
+
+// ═══════════════════════════════════════════
+//   UTILS
+// ═══════════════════════════════════════════
+function uid(){ return Math.random().toString(36).slice(2,10)+'_'+Date.now().toString(36); }
+
+function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+let toastTimer;
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='show'+(type?' '+type:'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{ el.className=''; },2800);
+}
+
+function saveGlobal(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({courses:state.courses,holidays:state.holidays}));
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════
+//   START
+// ═══════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
